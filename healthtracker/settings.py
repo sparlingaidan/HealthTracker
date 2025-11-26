@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import dj_database_url
 from pathlib import Path
 import os
 
@@ -27,7 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yph66fhggbl*!21q*j46+ck-rg4a!ww407uk#14_b)rlf))kg#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = ENVIRONMENT != "production"
+# DEBUG = ENVIRONMENT != "production"
+DEBUG = 'developement'
 
 ALLOWED_HOSTS = ['*']
 
@@ -77,13 +77,20 @@ WSGI_APPLICATION = 'healthtracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import dj_database_url
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if ENVIRONMENT == "production":
+    DATABASES = {
+        "default":
+dj_database_url.config(default=os.getenv("DATABASE_URL"))
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
@@ -126,7 +133,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STORAGES = {
     "staticfiles": {
         "BACKEND":
-        "whitenoise.storage.CompressedManifestStaticFilesStorage"
+"whitenoise.storage.CompressedManifestStaticFilesStorage"
     }
 }
 
@@ -143,5 +150,5 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Add our new application
-    'catalog.apps.CatalogConfig',  # This object was created for us in /catalog/apps.py
+    'catalog.apps.CatalogConfig', # This object was created for us in /catalog/apps.py
 ]
