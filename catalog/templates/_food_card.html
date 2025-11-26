@@ -1,0 +1,37 @@
+<div class="nutrition-label">
+  <h5>{{ food_item.foodName }}</h5>
+  <hr class="thick-line" />
+
+  <p class="amount">Amount per serving</p>
+  <div class="calories">
+    <span><strong>Calories</strong></span>
+    <span><strong>{{ food_item.calories|floatformat:0 }}</strong></span>
+  </div>
+
+  <hr class="thin-line" />
+
+  <p class="daily-value">% Daily Value*</p>
+
+  <div class="nutrient"><strong>Total Fat</strong> {{ food_item.fat|floatformat:1 }}g</div>
+  <div class="sub-nutrient">Saturated Fat {{ food_item.saturatedFat|floatformat:1 }}g</div>
+  <div class="sub-nutrient">Trans Fat {{ food_item.transFat|floatformat:1 }}g</div>
+
+  <div class="nutrient"><strong>Cholesterol</strong> {{ food_item.cholesterol|floatformat:1 }}mg</div>
+  <div class="nutrient"><strong>Sodium</strong> {{ food_item.sodium|floatformat:1 }}mg</div>
+
+  <div class="nutrient"><strong>Total Carbohydrate</strong> {{ food_item.carbohydrates|floatformat:1 }}g</div>
+  <div class="sub-nutrient">Dietary Fiber {{ food_item.fiber|floatformat:1 }}g</div>
+  <div class="sub-nutrient">Total Sugars {{ food_item.sugars|floatformat:1 }}g</div>
+
+  <div class="nutrient"><strong>Protein</strong> {{ food_item.protein|floatformat:1 }}g</div>
+
+  <hr class="thick-line" />
+  <p class="vitamins">
+    Vitamin D {{ food_item.vitaminD|floatformat:1 }}µg ·
+    Calcium {{ food_item.calcium|floatformat:1 }}mg ·
+    Iron {{ food_item.iron|floatformat:1 }}mg ·
+    Potassium {{ food_item.potassium|floatformat:1 }}mg
+  </p>
+
+  <p class="footnote">*Percent Daily Values are based on a 2,000 calorie diet.</p>
+</div>
