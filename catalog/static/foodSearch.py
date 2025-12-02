@@ -6,7 +6,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_nutrient_amounts(nutrientsList):
-    print(nutrientsList)
     amounts = {"Total lipid (fat)": 0,
                'Fatty acids, total saturated': 0,
                'Fatty acids, total trans': 0,
@@ -34,7 +33,8 @@ def get_nutrient_amounts(nutrientsList):
 
 def get_food_data(query):
     try:
-        url = f"https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query={query}"
+        key = 'glb9XFdhGGdEZ1pnLb7Xoi06Xc2BvCuhK17UQwWr'
+        url = f"https://api.nal.usda.gov/fdc/v1/foods/search?api_key={key}&query={query}"
         response = requests.get(url)
         response.raise_for_status()
         resp = response.json()

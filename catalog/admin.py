@@ -17,4 +17,5 @@ class LogItemAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('age', 'user',"id")
+    list_display = ('user', 'birthdate', 'height', 'weight', 'id')
 

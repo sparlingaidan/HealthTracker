@@ -1,0 +1,41 @@
+{% load static %}
+<script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+
+<div class="nutrient-gauges-scroll">
+  <div class="nutrient-gauges-container">
+    {% for name, nutrient in daily_nutrients.items %}
+      <div id="daily-gauge-{{ name }}" style="margin-bottom: 20px;"></div>
+
+      <script>
+        var data = [{
+            type: "indicator",
+            mode: "gauge+number",
+            value: {{ nutrient.value }},
+            title: { text: '{{ name|capfirst }}', font: { size: 24 } },
+            gauge: {
+                axis: { range: [0, {{ nutrient.maxRange }}], tickwidth: 1, tickcolor: "black" },
+                bar: { color: "grey" },
+                bgcolor: "grey",
+                borderwidth: 2,
+                bordercolor: "pink",
+                steps: [
+                    { range: [0, {{ nutrient.minIn }}], color: "white" },
+                    { range: [{{ nutrient.minIn }}, {{ nutrient.maxIn }}], color: "green" },
+                    { range: [{{ nutrient.maxIn }}, {{ nutrient.maxRange }}], color: "red" },
+                ]
+            }
+        }];
+
+        var layout = {
+            width: 255,
+            height: 260,
+            margin: { t: 25, r: 35, l: 35, b: 25 },
+            paper_bgcolor: "white",
+            font: { color: "black", family: "Arial" }
+        };
+
+        Plotly.newPlot('daily-gauge-{{ name }}', data, layout);
+    </script>
+    {% endfor %}
+  </div>
+</div>

@@ -14,7 +14,7 @@
         {% if profile.height %}<p><strong>Height:</strong> {{ profile.height }} cm</p>{% endif %}
         {% if profile.weight %}<p><strong>Weight:</strong> {{ profile.weight }} kg</p>{% endif %}
         {% if profile.get_gender_display %}<p><strong>Gender:</strong> {{ profile.get_gender_display }}</p>{% endif %}
-        <a href="{% url 'catalog:edit_profile' %}" class="btn btn-secondary">Edit Profile</a>
+        <a href="{% url 'edit_profile' %}" class="btn btn-secondary">Edit Profile</a>
       </div>
     </div>
   {% else %}

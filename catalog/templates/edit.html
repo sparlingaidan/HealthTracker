@@ -2,54 +2,57 @@
 {% load static %}
 
 {% block content %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<div class="page-background">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<div class="accordion" id="foodAccordion">
-    {% for logItem in LogItems %}
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapse{{ forloop.counter }}">
-                <div style="width: 100%;display: flex; justify-content: space-between; align-items: center;">
-                    <div>{{ logItem.foodItem.foodName }}</div>
-                    <div>{{ logItem.date }}</div>
+    <div class="accordion" id="foodAccordion">
+        {% for logItem in LogItems %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse{{ forloop.counter }}">
+                    <div style="width: 100%;display: flex; justify-content: space-between; align-items: center;">
+                        <div>{{ logItem.foodItem.foodName }}</div>
+                        <div>{{ logItem.date }}</div>
+                    </div>
+                </button>
+            </h2>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+                aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#foodAccordion">
+                <div class="accordion-body">
+                    <form method="POST" action="{% url 'update_percent' logItem.id %}"
+                        class="d-flex align-items-center">
+                        Servings:
+                        {% csrf_token %}
+                        {{ form.percentConsumed.errors }}
+                        <input type="number" step="0.1" min="0" max="1000" name="percentConsumed"
+                            value="{{ logItem.percentConsumed }}" class="form-control me-2" style="width: 100px;">
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                    {% include '_food_card.html' with food_item=logItem.foodItem %}
+
+                    <form method="POST" action="{% url 'update_date' logItem.id %}" class="d-flex align-items-center">
+                        Date:
+                        {% csrf_token %}
+                        {{ form.dateConsumed.errors }}
+                        <input type="datetime-local" name="date" value="{{ logItem.date }}" class="form-control me-2"
+                            style="width: 100px;">
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+
+                    <form method="POST" action="{% url 'delete_logItem'%}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        {{ form.LogItemDeleteForm.errors }}
+                        <input type="hidden" name="logItem_id" value="{{ logItem.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </div>
-            </button>
-        </h2>
-        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
-            aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#foodAccordion">
-            <div class="accordion-body">
-                <form method="POST" action="{% url 'update_percent' logItem.id %}" class="d-flex align-items-center">
-                    Servings:
-                    {% csrf_token %}
-                    {{ form.percentConsumed.errors }}
-                    <input type="number" step="0.1" min="0" max="1000" name="percentConsumed"
-                        value="{{ logItem.percentConsumed }}" class="form-control me-2" style="width: 100px;">
-                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                </form>
-                {% include '_food_card.html' with food_item=logItem.foodItem %}
-
-                <form method="POST" action="{% url 'update_date' logItem.id %}" class="d-flex align-items-center">
-                    Date:
-                    {% csrf_token %}
-                    {{ form.dateConsumed.errors }}
-                    <input type="datetime-local" name="date" value="{{ logItem.date }}"
-                        class="form-control me-2" style="width: 100px;">
-                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                </form>
-
-                <form method="POST" action="{% url 'delete_logItem'%}" class="d-flex align-items-center">
-                    {% csrf_token %}
-                    {{ form.LogItemDeleteForm.errors }}
-                    <input type="hidden" name="logItem_id" value="{{ logItem.id }}">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
             </div>
         </div>
+        {% empty %}
+        <h4>Try searching for a food!</h4>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>Try searching for a food!</p>
-    {% endfor %}
 </div>
 {% endblock %}
