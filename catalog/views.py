@@ -3,11 +3,18 @@ from .static.foodSearch import get_food_data, get_food_by_fdcId
 from .static.nutrient_functions import get_dv_avg, get_log_items
 from django.core.paginator import Paginator
 from django.core.cache import cache
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from .models import Profile, LogItem
-from .forms import PercentConsumedForm, DateConsumedForm, LogItemForm
+from .forms import SignUpForm, PercentConsumedForm, DateConsumedForm, LogItemForm
 from collections import OrderedDict
 from django.utils import timezone
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+from django.contrib.auth import login as auth_login
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 
 
 def search(request):
@@ -20,6 +27,8 @@ def search(request):
 
         if not foods:
             foods = get_food_data(query)
+            if foods is None:  # Ensure it's not None
+                foods = []  # Set to an empty list if None
             cache.set(cache_key, foods, timeout=60 * 60)  # Cache for 1 hour
 
     paginator = Paginator(foods, 6)
@@ -29,10 +38,11 @@ def search(request):
     return render(request, 'search.html',
                   {"page_obj": page_obj, "query": query})
 
-
+@login_required
 def index(request):
     """View function for home page of site."""
-    profile_Id = 1  # Change when we can Login.
+    cur_profile = request.user.profile
+    profile_Id = cur_profile.id
     end = timezone.now()
     start = end - timedelta(days=7)
 
@@ -55,7 +65,8 @@ def index(request):
 
 def edit(request):
     """View function for home page of site."""
-    profile_Id = 1  # Change when we can Login.
+    cur_profile = request.user.profile
+    profile_Id = cur_profile.id
     now = timezone.now()
     start = now - \
         timedelta(days=730)
@@ -97,10 +108,14 @@ def update_date(request, log_id):
             return render(request, '404.html', None)
 
 
+@login_required
 def save_logItem(request, fdcId):
     """Endpoint for saving logItem"""
     foodItem = get_food_by_fdcId(fdcId)
-    profile = Profile.objects.get(id=1)
+    
+    cur_profile = request.user.profile
+    profile_Id = cur_profile.id
+    profile = Profile.objects.get(id=profile_Id)
     if request.method == 'POST':
         form = LogItemForm(request.POST)
         if form.is_valid():
@@ -110,7 +125,7 @@ def save_logItem(request, fdcId):
                 percentConsumed=form.cleaned_data['percentConsumed'],
                 foodItem=foodItem
             )
-            return redirect(request.META.get('HTTP_REFERER', '/'))
+            return HttpResponseRedirect(reverse('index'))
         else:
             return render(request, '404.html', None)
 
@@ -126,3 +141,73 @@ def delete_logItem(request):
             return redirect(request.META.get('HTTP_REFERER', '/'))
         else:
             return render(request, '404.html', None)
+
+
+@login_required
+def profile(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profile = None
+    return render(request, 'profile.html', {'profile': profile})
+
+
+@login_required
+def edit_profile(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
+
+    from .forms import ProfileForm
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'profile_edit.html', {'form': form})
+
+
+def logout_view(request):
+    """Log the user out and render a custom logged out page."""
+    auth_logout(request)
+    messages.info(request, "You've been logged out.")
+    return render(request, 'logged_out.html')
+
+
+
+def signup(request):
+    User = get_user_model()
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            birthdate = form.cleaned_data.get('birthdate')
+            height = form.cleaned_data.get('height')
+            weight = form.cleaned_data.get('weight')
+            now = date.today()
+            age = now.year - birthdate.year - ((now.month, now.day) < (birthdate.month, birthdate.day))
+            
+
+            # check for existing username/email
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', 'Username already taken.')
+            elif User.objects.filter(email=email).exists():
+                form.add_error('email', 'Email already registered.')
+            else:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                Profile.objects.create(user=user, age=age, birthdate=birthdate, height=height, weight=weight)
+                # Log the user in and show a success message
+                auth_login(request, user)
+                messages.success(request, 'Account created and you are now logged in.')
+                return HttpResponseRedirect(reverse('index'))
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})

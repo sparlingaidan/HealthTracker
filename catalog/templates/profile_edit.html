@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Edit Profile</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.birthdate.label_tag }}<br>
+      {{ form.birthdate }}
++      {{ form.birthdate.errors }}
+    </div>
+    <div>
+      {{ form.height.label_tag }}<br>
+      {{ form.height }}
++      {{ form.height.errors }}
+    </div>
+    <div>
+      {{ form.weight.label_tag }}<br>
+      {{ form.weight }}
++      {{ form.weight.errors }}
+    </div>
+    <div>
+      {{ form.gender.label_tag }}<br>
+      {{ form.gender }}
++      {{ form.gender.errors }}
+    </div>
+    <div>
+      {{ form.image.label_tag }}<br>
+      {{ form.image }}
++      {{ form.image.errors }}
+    </div>
+    <button type="submit">Save</button>
+  </form>
+{% endblock %}

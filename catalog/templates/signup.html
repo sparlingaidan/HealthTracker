@@ -1,0 +1,40 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Sign-Up</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.email.label_tag }}<br>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <div>
+      {{ form.username.label_tag }}<br>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div>
+      {{ form.password.label_tag }}<br>
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+    <div>
+      {{ form.birthdate.label_tag }}<br>
+      {{ form.birthdate }}
+      {{ form.birthdate.errors }}
+    </div>
+    <div>
+      {{ form.height.label_tag }}<br>
+      {{ form.height }}
+      {{ form.height.errors }}
+    </div>
+    <div>
+      {{ form.weight.label_tag }}<br>
+      {{ form.weight }}
+      {{ form.weight.errors }}
+    </div>
+    <button type="submit">Sign Up</button>
+  </form>
+{% endblock %}

@@ -78,19 +78,28 @@ WSGI_APPLICATION = 'healthtracker.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 import dj_database_url
+import os
+
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development")
 
 if ENVIRONMENT == "production":
     DATABASES = {
-        "default":
-dj_database_url.config(default=os.getenv("DATABASE_URL"))
+        "default": dj_database_url.config(
+            env="DATABASE_URL",
+            default=f"postgres://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@db:5432/{os.getenv('POSTGRES_DB')}",
+            conn_max_age=600,
+            ssl_require=False,
+        )
     }
 else:
+    # For local development (optional: use postgres too)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
 
 
 # Password validation
@@ -152,3 +161,12 @@ INSTALLED_APPS = [
     # Add our new application
     'catalog.apps.CatalogConfig', # This object was created for us in /catalog/apps.py
 ]
+
+
+# Media files (user uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Redirects after login/logout
+LOGIN_REDIRECT_URL = '/catalog/profile/'
+LOGOUT_REDIRECT_URL = '/catlog/'

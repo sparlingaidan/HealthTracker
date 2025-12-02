@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>My Profile</h1>
+  {% if profile %}
+    <div class="card" style="width: 18rem;">
+      {% if profile.image %}
+        <img src="{{ profile.image.url }}" class="card-img-top" alt="Profile image">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ profile.user.username }}</h5>
+        <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
+        {% if profile.birthdate %}<p><strong>Birthdate:</strong> {{ profile.birthdate }}</p>{% endif %}
+        {% if profile.height %}<p><strong>Height:</strong> {{ profile.height }} cm</p>{% endif %}
+        {% if profile.weight %}<p><strong>Weight:</strong> {{ profile.weight }} kg</p>{% endif %}
+        {% if profile.get_gender_display %}<p><strong>Gender:</strong> {{ profile.get_gender_display }}</p>{% endif %}
+        <a href="{% url 'catalog:edit_profile' %}" class="btn btn-secondary">Edit Profile</a>
+      </div>
+    </div>
+  {% else %}
+    <p>No profile found for your account.</p>
+  {% endif %}
+{% endblock %}
