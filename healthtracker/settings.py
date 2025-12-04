@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 
 ENVIRONMENT = os.getenv("DJANGO_ENV", "production")
+DEBUG = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,6 @@ SECRET_KEY = 'django-insecure-yph66fhggbl*!21q*j46+ck-rg4a!ww407uk#14_b)rlf))kg#
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = ENVIRONMENT != "production"
-DEBUG = 'developement'
 
 ALLOWED_HOSTS = ['*']
 
@@ -79,8 +79,6 @@ WSGI_APPLICATION = 'healthtracker.wsgi.application'
 
 import dj_database_url
 import os
-
-ENVIRONMENT = os.getenv("DJANGO_ENV", "development")
 
 if ENVIRONMENT == "production":
     DATABASES = {

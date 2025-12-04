@@ -1,0 +1,129 @@
+/* Container for multiple cards */
+.food-cards-container {
+  display: flex;
+  flex-wrap: wrap;           /* allows multiple rows */
+  gap: 20px;                 /* space between cards */
+  justify-content: center;   /* center cards horizontally */
+}
+
+/* Nutrition label card */
+.nutrition-label {
+  flex: 1 1 calc(33.333% - 20px); /* 3 cards per row, accounting for gap */
+  max-width: 300px;               /* keeps cards from getting too wide */
+  margin: 0 auto 20px;            /* center horizontally, space below */
+  padding: 8px;
+  border: 2px solid #000;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+/* Header */
+.nutrition-label h5 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+/* Amount per serving */
+.nutrition-label .amount {
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Calories section */
+.nutrition-label .calories {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+
+/* Daily value text */
+.nutrition-label .daily-value {
+  margin: 4px 0;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* Nutrients */
+.nutrition-label .nutrient {
+  margin: 0;
+}
+
+.nutrition-label .sub-nutrient {
+  margin-left: 10px;
+}
+
+/* Vitamins / minerals */
+.nutrition-label .vitamins {
+  margin: 2px 0;
+  font-size: 11px;
+}
+
+/* Footnote */
+.nutrition-label .footnote {
+  margin-top: 4px;
+  font-size: 10px;
+  text-align: center;
+}
+
+/* Lines */
+.thick-line {
+  border-top: 4px solid #000;
+  margin: 4px 0;
+  opacity: 1;
+}
+
+.thin-line {
+  border-top: 1px solid #000;
+  margin: 4px 0;
+  opacity: 1;
+}
+
+.name_date {
+  display: flex;
+}
+/* Scrollable container wrapper */
+.nutrient-gauges-scroll {
+    height: 50vh;
+    overflow-y: auto;
+    padding-right: 10px; /* prevents scrollbar overlap */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+/* Grid layout inside the scrollable area */
+.nutrient-gauges-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Optional styling for each gauge block */
+.gauge-wrapper {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.gauge-box {
+    width: 100%;
+    height: 260px;
+}
+
+/* Background for index page content (covers content below navbar only) */
+.page-background {
+  background-image: url('/static/images/background.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* Ensure it covers the viewport minus typical navbar height */
+  min-height: calc(100vh - 56px);
+  padding: 40px 20px;
+}
