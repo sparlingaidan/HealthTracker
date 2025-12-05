@@ -11,11 +11,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<div class="container my-4" style="width: 50vw;">
+<div class="container my-4">
   <form method="get" action="{% url 'search' %}" id="search-form" class="input-group mx-auto">
     <input type="text" name="q" class="form-control" placeholder="Search for food..." value="{{ request.GET.q }}">
     <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="submit" id="submit-search">search 🕵️🧐</button>
+      <button class="btn btn-outline-secondary" type="submit" id="submit-search">search🕵️</button>
     </div>
   </form>
 </div>
