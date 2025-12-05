@@ -287,3 +287,7 @@ def user_login(request):
         'next': request.GET.get('next', ''),
     }
     return render(request, 'login.html', context) # Assuming your template is named 'login.html' or 'registration/login.html'
+
+@login_required
+def info(request):
+    return render(request, 'info.html', None)

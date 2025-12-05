@@ -33,7 +33,7 @@ nutrient_ranges = {
     "fiber": {"min": 25, "max": 35, "target": 28},  # g
     "sugars": {"min": 0, "max": 50, "target": 50},  # g, added sugars DV
     "protein": {"min": 45, "max": 65, "target": 50},  # g
-    "calcium": {"min": 1000, "max": 1300, "target": 1300},  # mg
+    "calcium": {"min": 700, "max": 1200, "target": 1000},  # mg
     "iron": {"min": 8, "max": 18, "target": 18},  # mg
     "potassium": {"min": 2600, "max": 4700, "target": 4700},  # mg
     "magnesium": {"min": 310, "max": 420, "target": 420},  # mg (adult male)

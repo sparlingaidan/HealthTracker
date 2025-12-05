@@ -1,0 +1,214 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <header class="text-center mb-5">
+        <h2 class="display-4">Welcome to Our Health Tracker!</h2>
+        <p class="lead">
+            This tool helps you gauge how far you are from your ideal macronutrient goals. The home page sorts your progress from farthest out of range to closest.
+        </p>
+    </header>
+
+    <hr>
+
+    <section class="mb-5">
+        <h3 class="mb-3">Getting Started: Two Simple Steps</h3>
+
+        <div class="card p-4 mb-4">
+            <h4 class="card-title text-primary">1. Enter Your Food Items</h4>
+            <p>
+                Go to the <a href="{% url 'search' %}">search page</a> and start adding foods. We source our detailed food entries from the reliable
+                <a target="_blank" href="https://fdc.nal.usda.gov/api-spec/fdc_api.html" class="text-decoration-none">FDC API (U.S. Department of Agriculture)</a>.
+            </p>
+        </div>
+
+        <div class="card p-4">
+            <h4 class="card-title text-primary">2. Provide Your Personal Information</h4>
+            <p>
+                We use your details (age, weight, height, etc.) to estimate personalized target goals for each macronutrient.
+                <br>
+                Note on Activity Level: The CDC uses four activity categories. For simplicity, we currently assume all users are Active adults.
+            </p>
+        </div>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3 class="mb-4">Macronutrient & Micronutrient Target Formulas</h3>
+        <p>
+            The table below summarizes the target goals and the formulas used for calculation, based on various reputable health sources.
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Nutrient</th>
+                        <th scope="col">Target / Formula</th>
+                        <th scope="col">Notes & Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Calories (kcal)</th>
+                        <td>
+                            Men: 864 - 9.72 \times \text{Age (years)} + 1.27 \times (14.2 \times \text{Weight (kg)} + 503 \times \text{Height (meters)})
+                            <br>
+                            Women: 387 - 7.31 \times \text{Age (years)} + 1.27 \times (10.9 \times \text{Weight (kg)} + 660.7 \times \text{Height (meters)})
+                        </td>
+                        <td>
+                            Based on a CDC equation.
+                            <br>
+                            <a target="_blank" href="https://www.cdc.gov/pcd/issues/2006/oct/06_0034.htm#:~:text=Based%20on%20the%20energy%20intake,labeled%20water%20studies%20(1).">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Protein (g)</th>
+                        <td>2.2 grams / kg of body weight</td>
+                        <td>
+                            Upper end of the recommended range (1.6-2.2 g/kg).
+                            <br>
+                            <a target="_blank" href="https://www.usada.org/spirit-of-sport/when-consume-protein-muscle-growth/?utm_term=protein%20consumption%20guide&utm_campaign=Resources+-+USADA&utm_source=adwords&utm_medium=ppc&hsa_acc=7613056470&hsa_cam=6774395248&hsa_grp=182062839348&hsa_ad=729437076236&hsa_src=g&hsa_tgt=kwd-2391627580043&hsa_kw=protein%20consumption%20guide&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=6774395248&gbraid=0AAAAAD0t-nzOLgdL8yH73IjIN4x9DZrHG&gclid=Cj0KCQiAosrJBhD0ARIsAHebCNqZQk2zLQYm6uCLg4_K7830TtC6F0Bfw3ONeoBjWWwB_epFzXizY74aAlsBEALw_wcB">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Carbohydrates (g)</th>
+                        <td>130 + (\text{Calories} / 2)</td>
+                        <td>
+                            Minimum requirement (130g) + estimate based on calorie intake.
+                            <br>
+                            <a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Fat (g)</th>
+                        <td>Calories \times 0.30</td>
+                        <td>
+                            A target of 30% of total daily calories.
+                            <br>
+                            <a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Saturated Fat (g)</th>
+                        <td>Less than (Calories \times 0.10)</td>
+                        <td>
+                            Goal: less than 10% of total daily calories.
+                            <br>
+                            <a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Added Sugars (g)</th>
+                        <td>Less than (Calories \times 0.10)</td>
+                        <td>
+                            Goal: less than 10% of total daily calories. The main goal is to avoid added sugars.
+                            <br>
+                            <a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fiber (g)</th>
+                        <td>Calories \times 0.0714</td>
+                        <td>
+                            Based on a recommendation of approximately 14g per 1000 calories.
+                            <br>
+                            <a target="_blank" href="https://www.uchealth.com/en/media-room/articles/eating-the-right-amount-of-fiber">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cholesterol (mg)</th>
+                        <td>0</td>
+                        <td>
+                            The USDA recommends keeping dietary cholesterol as low as possible without affecting nutrition.
+                            <br>
+                            <a target="_blank" href="https://health.clevelandclinic.org/how-much-cholesterol-per-day">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Trans Fat (g)</th>
+                        <td>0</td>
+                        <td>Goal is always zero.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="mt-5 mb-3">Essentials & Micronutrients (RDA/AI)</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col">Nutrient</th>
+                        <th scope="col">Men</th>
+                        <th scope="col">Women</th>
+                        <th scope="col">Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Calcium (mg)</th>
+                        <td colspan="2">1,000 mg</td>
+                        <td>
+                            General concise recommendation, though Harvard suggests at least 700 mg.
+                            <br>
+                            <a target="_blank" href="https://www.betterhealth.vic.gov.au/health/healthyliving/calcium">Source (1000 mg)</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Sodium (mg)</th>
+                        <td colspan="2">2,300 mg</td>
+                        <td>
+                            Upper limit recommendation. Note: sweating may require more, but that information is not currently accounted for.
+                            <br>
+                            <a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Iron (mg)</th>
+                        <td>8 mg</td>
+                        <td>18 mg</td>
+                        <td><a target="_blank" href="https://ods.od.nih.gov/factsheets/Iron-Consumer/">Source</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Magnesium (mg)</th>
+                        <td>400 - 420 mg</td>
+                        <td>310 - 320 mg</td>
+                        <td><a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Phosphorus (mg)</th>
+                        <td colspan="2">700 mg</td>
+                        <td><a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Potassium (mg)</th>
+                        <td>3,400 mg</td>
+                        <td>2,600 mg</td>
+                        <td><a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Vitamin C (mg)</th>
+                        <td>90 mg</td>
+                        <td>70 mg</td>
+                        <td><a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Vitamin D (IU)</th>
+                        <td colspan="2">600 IU</td>
+                        <td><a target="_blank" href="https://www.dietaryguidelines.gov/sites/default/files/2020-12/Dietary_Guidelines_for_Americans_2020-2025.pdf">Source</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Zinc (mg)</th>
+                        <td>11 mg</td>
+                        <td>8 mg</td>
+                        <td><a target="_blank" href="https://ods.od.nih.gov/factsheets/Zinc-Consumer/">Source</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
