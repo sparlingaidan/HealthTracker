@@ -52,27 +52,12 @@ def index(request):
     '''start date, end date, #profile_id'''
     averages = get_dv_avg(start, end, profile_Id)
 
-    '''Sort gauges by nutrinet_funtions.deviaiton, Worst first '''
-    nutrients = sorted(
-        averages.items(),
-        key=lambda item: int(item[1]['deviation']),
-        reverse=True)
-    nutrients = OrderedDict(nutrients)
-
-
     '''start date, end date, #profile_id'''
     daily_averages = get_dv_avg(yesterday, end, profile_Id)
 
-    '''Sort gauges by nutrinet_funtions.deviaiton, Worst first '''
-    daily_nutrients = sorted(
-        daily_averages.items(),
-        key=lambda item: int(item[1]['deviation']),
-        reverse=True)
-    daily_nutrients = OrderedDict(daily_nutrients)
-
     context = {
-        'daily_nutrients': daily_nutrients,
-        'nutrients': nutrients,
+        'daily_nutrients': daily_averages,
+        'nutrients': averages,
     }
 
     return render(request, 'index.html', context=context)
