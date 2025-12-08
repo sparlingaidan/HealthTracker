@@ -1,10 +1,5 @@
-<div class="modal fade"
-     id="Modal{{ food_item.fdcId }}"
-     tabindex="-1"
-     aria-labelledby="Modal{{ food_item.fdcId }}Label"
-     aria-hidden="true"
-     data-bs-backdrop="static"
-     data-bs-keyboard="false">
+<div class="modal fade" id="Modal{{ food_item.fdcId }}" tabindex="-1" aria-labelledby="Modal{{ food_item.fdcId }}Label"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -28,26 +23,28 @@
                         </div>
 
                         <div class="col-auto">
-                            <input type="number"
-                                   id="percent{{ food_item.fdcId }}"
-                                   name="percentConsumed"
-                                   step="1"
-                                   min="0"
-                                   max="1000"
-                                   value="1"
-                                   class="form-control"
-                                   style="width:120px;">
+                            <input type="number" id="percent{{ food_item.fdcId }}" name="percentConsumed" step="1"
+                                min="0" max="1000" value="1" class="form-control" style="width:120px;">
                             {{ form.percentConsumed.errors }}
                         </div>
 
                         <div class="col-auto">
-                            <input type="datetime-local"
-                                   name="date"
-                                   class="form-control"
-                                   style="width:190px;">
+                            <input id="date-Input" type="datetime-local" name="date" class="form-control"
+                                style="width:190px;">
+
+                            <script>
+                                window.onload = function () {
+                                    const datetimeInput = document.getElementById("date-Input");
+                                    const now = new Date();
+
+                                    const formattedDateTime = now.toISOString().slice(0, 16); // simpler!
+                                    datetimeInput.value = formattedDateTime;
+                                }
+                            </script>
+
                         </div>
                     </div>
-                    
+
                     <input type="hidden" name="fdcId" value="{{ food_item.fdcId }}">
 
                     <!-- Optional: Summary of the food -->
