@@ -12,8 +12,8 @@
       <h5 class="card-title">{{ profile.user.username }}</h5>
       <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
       {% if profile.birthdate %}<p><strong>Birthdate:</strong> {{ profile.birthdate }}</p>{% endif %}
-      {% if profile.height %}<p><strong>Height:</strong> {{ profile.height }} cm</p>{% endif %}
-      {% if profile.weight %}<p><strong>Weight:</strong> {{ profile.weight }} kg</p>{% endif %}
+      {% if profile.height %}<p><strong>Height:</strong> {{ profile.height }} ft</p>{% endif %}
+      {% if profile.weight %}<p><strong>Weight:</strong> {{ profile.weight }} lb</p>{% endif %}
       {% if profile.get_gender_display %}<p><strong>Gender:</strong> {{ profile.get_gender_display }}</p>{% endif %}
       <a href="{% url 'edit_profile' %}" class="btn btn-secondary">Edit Profile</a>
     </div>
